@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -15,34 +16,31 @@ text-align:center;
 margin-top:80px;
 }
 
-h1{
-font-size:42px;
-}
-
 input{
 display:block;
-margin:15px auto;
-padding:12px;
+margin:10px auto;
+padding:10px;
 width:260px;
-border-radius:8px;
+border-radius:6px;
 border:none;
 }
 
 button{
-padding:12px 25px;
-border:none;
-border-radius:10px;
+padding:10px 20px;
+margin:10px;
 background:#6366f1;
 color:white;
+border:none;
+border-radius:6px;
 cursor:pointer;
-margin:10px;
 }
 
-#status{
+#msg{
 margin-top:20px;
 color:#cbd5f5;
 }
 </style>
+
 </head>
 
 <body>
@@ -53,14 +51,14 @@ color:#cbd5f5;
 <input id="email" type="email" placeholder="Email">
 <input id="password" type="password" placeholder="Password">
 
-<button onclick="signUp()">Sign Up</button>
-<button onclick="login()">Login</button>
+<button onclick="signUp()">Sign Up</button> <button onclick="login()">Login</button>
 
-<p id="status"></p>
+<p id="msg"></p>
 
 <script>
 
 const supabaseUrl = "https://etccavrpbchbtcpeegtbu.supabase.co"
+
 const supabaseKey = "sb_publishable_b_WO8d4duWJ7tATcBIceRg_TbzF-2-N"
 
 const supabase = window.supabase.createClient(supabaseUrl, supabaseKey)
@@ -76,9 +74,9 @@ password: password
 })
 
 if(error){
-document.getElementById("status").innerText = error.message
+document.getElementById("msg").innerText = error.message
 }else{
-document.getElementById("status").innerText = "Signup success! Check your email."
+document.getElementById("msg").innerText = "Signup success! Check your email."
 }
 
 }
@@ -94,9 +92,9 @@ password: password
 })
 
 if(error){
-document.getElementById("status").innerText = error.message
+document.getElementById("msg").innerText = error.message
 }else{
-document.getElementById("status").innerText = "Login success!"
+document.getElementById("msg").innerText = "Login success!"
 }
 
 }
