@@ -4,34 +4,38 @@
 <meta charset="UTF-8">
 <title>Dream Makers Studio AI</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
 <style>
 body{
 font-family:Arial;
 background:#0f172a;
 color:white;
 text-align:center;
-margin-top:120px;
+margin-top:80px;
 }
 
 h1{
-font-size:48px;
-margin-bottom:20px;
+font-size:42px;
 }
 
-p{
-font-size:20px;
-color:#cbd5f5;
+input{
+display:block;
+margin:15px auto;
+padding:10px;
+width:250px;
+border-radius:8px;
+border:none;
 }
 
 button{
-margin-top:40px;
-padding:15px 30px;
-font-size:18px;
+padding:12px 25px;
 border:none;
 border-radius:10px;
 background:#6366f1;
 color:white;
 cursor:pointer;
+margin:10px;
 }
 </style>
 </head>
@@ -40,11 +44,60 @@ cursor:pointer;
 
 <h1>Dream Makers Studio AI</h1>
 
-<p>Transform your home and garden with AI</p>
+<h3>Signup / Login Test</h3>
 
-<p>Upload a photo and see the magic.</p>
+<input id="email" type="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
 
-<button>Upload Photo</button>
+<button onclick="signUp()">Sign Up</button>
+<button onclick="login()">Login</button>
+
+<p id="status"></p>
+
+<script>
+
+const SUPABASE_URL = "https://etccavrpbchbtcpeegtbu.supabase.co"
+const SUPABASE_KEY = "sb_publishable_b_WO8d4duWJ7tATcBIceRg_TbzF-2-N"
+
+const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+
+async function signUp(){
+
+const email = document.getElementById("email").value
+const password = document.getElementById("password").value
+
+const { data, error } = await client.auth.signUp({
+email: email,
+password: password
+})
+
+if(error){
+document.getElementById("status").innerText = error.message
+}else{
+document.getElementById("status").innerText = "Signup success! Check your email."
+}
+
+}
+
+async function login(){
+
+const email = document.getElementById("email").value
+const password = document.getElementById("password").value
+
+const { data, error } = await client.auth.signInWithPassword({
+email: email,
+password: password
+})
+
+if(error){
+document.getElementById("status").innerText = error.message
+}else{
+document.getElementById("status").innerText = "Login success!"
+}
+
+}
+
+</script>
 
 </body>
 </html>
