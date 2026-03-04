@@ -59,7 +59,8 @@ margin:10px;
 const SUPABASE_URL = "https://etccavrpbchbtcpeegtbu.supabase.co"
 const SUPABASE_KEY = "sb_publishable_b_WO8d4duWJ7tATcBIceRg_TbzF-2-N"
 
-const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+const { createClient } = supabase
+const client = createClient(SUPABASE_URL, SUPABASE_KEY)
 
 async function signUp(){
 
