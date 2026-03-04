@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Dream Makers Studio AI</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
 body{
@@ -59,8 +59,7 @@ margin:10px;
 const SUPABASE_URL = "https://etccavrpbchbtcpeegtbu.supabase.co"
 const SUPABASE_KEY = "sb_publishable_b_WO8d4duWJ7tATcBIceRg_TbzF-2-N"
 
-const { createClient } = supabase
-const client = createClient(SUPABASE_URL, SUPABASE_KEY)
+const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 
 async function signUp(){
 
