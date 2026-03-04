@@ -22,8 +22,8 @@ font-size:42px;
 input{
 display:block;
 margin:15px auto;
-padding:10px;
-width:250px;
+padding:12px;
+width:260px;
 border-radius:8px;
 border:none;
 }
@@ -37,13 +37,17 @@ color:white;
 cursor:pointer;
 margin:10px;
 }
+
+#status{
+margin-top:20px;
+color:#cbd5f5;
+}
 </style>
 </head>
 
 <body>
 
 <h1>Dream Makers Studio AI</h1>
-
 <h3>Signup / Login Test</h3>
 
 <input id="email" type="email" placeholder="Email">
@@ -56,17 +60,17 @@ margin:10px;
 
 <script>
 
-const SUPABASE_URL = "https://etccavrpbchbtcpeegtbu.supabase.co"
-const SUPABASE_KEY = "sb_publishable_b_WO8d4duWJ7tATcBIceRg_TbzF-2-N"
+const supabaseUrl = "https://etccavrpbchbtcpeegtbu.supabase.co"
+const supabaseKey = "sb_publishable_b_WO8d4duWJ7tATcBIceRg_TbzF-2-N"
 
-const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey)
 
 async function signUp(){
 
 const email = document.getElementById("email").value
 const password = document.getElementById("password").value
 
-const { data, error } = await client.auth.signUp({
+const { data, error } = await supabase.auth.signUp({
 email: email,
 password: password
 })
@@ -84,7 +88,7 @@ async function login(){
 const email = document.getElementById("email").value
 const password = document.getElementById("password").value
 
-const { data, error } = await client.auth.signInWithPassword({
+const { data, error } = await supabase.auth.signInWithPassword({
 email: email,
 password: password
 })
