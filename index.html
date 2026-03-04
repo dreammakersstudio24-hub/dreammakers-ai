@@ -8,12 +8,13 @@
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <style>
+
 body{
 font-family:Arial;
 background:#0f172a;
 color:white;
 text-align:center;
-margin-top:80px;
+margin-top:100px;
 }
 
 input{
@@ -39,6 +40,7 @@ cursor:pointer;
 margin-top:20px;
 color:#cbd5f5;
 }
+
 </style>
 
 </head>
@@ -49,9 +51,12 @@ color:#cbd5f5;
 <h3>Signup / Login Test</h3>
 
 <input id="email" type="email" placeholder="Email">
+
 <input id="password" type="password" placeholder="Password">
 
-<button onclick="signUp()">Sign Up</button> <button onclick="login()">Login</button>
+<button onclick="signUp()">Sign Up</button>
+
+<button onclick="login()">Login</button>
 
 <p id="msg"></p>
 
@@ -75,7 +80,8 @@ password: password
 
 if(error){
 document.getElementById("msg").innerText = error.message
-}else{
+}
+else{
 document.getElementById("msg").innerText = "Signup success! Check your email."
 }
 
@@ -93,7 +99,8 @@ password: password
 
 if(error){
 document.getElementById("msg").innerText = error.message
-}else{
+}
+else{
 document.getElementById("msg").innerText = "Login success!"
 }
 
