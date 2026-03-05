@@ -9,13 +9,13 @@ try{
 const token = process.env.REPLICATE_API_TOKEN
 const {image,style} = req.body
 
-// convert image url -> base64
+// convert image URL -> base64
 const img = await fetch(image)
 const buffer = await img.arrayBuffer()
 const base64 = Buffer.from(buffer).toString("base64")
 
 const prompt =
-"beautiful "+style+" style interior design, photorealistic, keep same room layout"
+"beautiful "+style+" interior design, photorealistic, keep same room layout"
 
 const response = await fetch(
 "https://api.replicate.com/v1/predictions",
@@ -43,7 +43,7 @@ num_outputs:1
 
 const data = await response.json()
 
-console.log("Replicate:",data)
+console.log("Replicate result:",data)
 
 if(!data.output){
 return res.status(500).json({error:"AI generation failed"})
