@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
 
-try {
+try{
 
 const token = process.env.REPLICATE_API_TOKEN
 const { image, style } = req.body
@@ -18,13 +18,16 @@ headers:{
 "Prefer":"wait"
 },
 body:JSON.stringify({
-version:"15a3689c7b4d3e3f9c5a16e9c5d2c65e6a85ee661eb5d286276f4e5a3815014a",
+
+version:"db21e45caa7c57c3b5c7c7b69c8b1eab2b2f6c6f1a0d9c9a8b4e6c5d3c8f6f3e",
+
 input:{
-init_image:image,
+image:image,
 prompt:prompt,
-strength:0.65,
+prompt_strength:0.8,
 num_outputs:1
 }
+
 })
 }
 )
@@ -32,9 +35,7 @@ num_outputs:1
 const data = await response.json()
 
 if(!data.output){
-return res.status(500).json({
-error:"AI generation failed"
-})
+return res.status(500).json({error:"AI generation failed"})
 }
 
 return res.status(200).json({
