@@ -237,8 +237,6 @@ document.getElementById("styleStatus").innerText =
 }
 async function generateAI(){
 
-console.log("BUTTON CLICKED")  
-
 if(selectedStyle === ""){
 alert("Please select a style first")
 return
@@ -250,10 +248,25 @@ return
 }
 
 document.getElementById("aiStatus").innerText =
-"Preparing AI generation..."
+"Generating AI design..."
 
-console.log("IMAGE:", window.uploadedImageUrl)
-console.log("STYLE:", selectedStyle)
+const response = await fetch("/api/generate",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+image:window.uploadedImageUrl,
+style:selectedStyle
+})
+})
+
+const data = await response.json()
+
+console.log(data)
+
+document.getElementById("aiStatus").innerText =
+"AI request sent. Rendering may take ~20 seconds."
 
 }
 </script>
