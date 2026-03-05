@@ -7,7 +7,7 @@ const replicateToken = process.env.REPLICATE_API_TOKEN
 const { image, style } = req.body
 
 const prompt =
-"Interior redesign of this room in "+style+" style, ultra realistic, interior design photography"
+"Interior redesign of this room in "+style+" style, ultra realistic interior design, photorealistic"
 
 const prediction = await fetch(
 "https://api.replicate.com/v1/predictions",
@@ -18,7 +18,7 @@ headers:{
 "Content-Type":"application/json"
 },
 body:JSON.stringify({
-version:"7762fd07cf82c5a453c33dfd59f7f8c3cecb84ccf0c5d7f82e3d7b66c9b1a87a",
+version:"stability-ai/sdxl",
 input:{
 image:image,
 prompt:prompt
@@ -29,8 +29,15 @@ prompt:prompt
 
 const data = await prediction.json()
 
-if(!data.urls || !data.urls.get){
-return res.status(500).json({error:"Replicate response invalid"})
+console.log("REPLICATE RESPONSE:",data)
+
+if(!data.urls){
+
+return res.status(500).json({
+error:"Replicate did not return urls",
+replicate:data
+})
+
 }
 
 let getUrl = data.urls.get
@@ -47,6 +54,8 @@ headers:{
 
 const pollData = await poll.json()
 
+console.log("POLL:",pollData.status)
+
 if(pollData.status === "succeeded"){
 
 return res.status(200).json({
@@ -58,7 +67,8 @@ output: pollData.output
 if(pollData.status === "failed"){
 
 return res.status(500).json({
-error:"AI generation failed"
+error:"AI generation failed",
+details:pollData
 })
 
 }
@@ -67,7 +77,7 @@ error:"AI generation failed"
 
 }catch(err){
 
-console.log(err)
+console.log("SERVER ERROR:",err)
 
 return res.status(500).json({
 error:err.message
