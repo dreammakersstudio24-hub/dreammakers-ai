@@ -1,66 +1,66 @@
-export default async function handler(req,res){
+export default async function handler(req, res) {
 
-if(req.method !== "POST"){
-return res.status(405).json({error:"Method not allowed"})
+if (req.method !== "POST") {
+return res.status(405).json({ error: "Method not allowed" });
 }
 
-try{
+try {
 
-const token = process.env.REPLICATE_API_TOKEN
-const {image,style} = req.body
-
-// convert image URL -> base64
-const img = await fetch(image)
-const buffer = await img.arrayBuffer()
-const base64 = Buffer.from(buffer).toString("base64")
+```
+const token = process.env.REPLICATE_API_TOKEN;
+const { image, style } = req.body;
 
 const prompt =
-"beautiful "+style+" interior design, photorealistic, keep same room layout"
+  "beautiful " +
+  style +
+  " interior design, photorealistic, ultra realistic, keep same room layout";
 
-const response = await fetch(
-"https://api.replicate.com/v1/predictions",
-{
-method:"POST",
-headers:{
-Authorization:`Token ${token}`,
-"Content-Type":"application/json",
-Prefer:"wait"
-},
-body:JSON.stringify({
+const replicateResponse = await fetch(
+  "https://api.replicate.com/v1/predictions",
+  {
+    method: "POST",
+    headers: {
+      Authorization: `Token ${token}`,
+      "Content-Type": "application/json",
+      Prefer: "wait"
+    },
+    body: JSON.stringify({
+      version:
+        "db21e45c8e0a8e9b1fbe8c0d5857a1f5aaecf66da68c249c090e28ca06e4756a",
 
-version:"ac732df83cea7fff1cf3f0e3c5a6d2a45c7c1d24b3a91a6b1e0c9c45f1ab3c5e",
+      input: {
+        image: image,
+        prompt: prompt
+      }
+    })
+  }
+);
 
-input:{
-image:"data:image/png;base64,"+base64,
-prompt:prompt,
-strength:0.65,
-num_outputs:1
-}
+const data = await replicateResponse.json();
 
-})
-}
-)
+console.log("Replicate response:", data);
 
-const data = await response.json()
-
-console.log("Replicate result:",data)
-
-if(!data.output){
-return res.status(500).json({error:"AI generation failed"})
+if (!data.output) {
+  return res.status(500).json({
+    error: "AI generation failed",
+    details: data
+  });
 }
 
 return res.status(200).json({
-output:data.output
-})
+  output: data.output
+});
+```
 
-}catch(err){
+} catch (err) {
 
-console.error(err)
+```
+console.error(err);
 
 return res.status(500).json({
-error:err.message
-})
+  error: err.message
+});
+```
 
 }
-
 }
