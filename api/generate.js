@@ -1,32 +1,28 @@
-export default async function handler(req,res){
+export default async function handler(req, res) {
 
-if(req.method !== "POST"){
-return res.status(405).json({error:"Method not allowed"})
-}
-
-try{
+try {
 
 const token = process.env.REPLICATE_API_TOKEN
-const {image,style} = req.body
+const { image, style } = req.body
 
 const prompt =
-"beautiful "+style+" style garden design, photorealistic, keep original layout"
+"beautiful "+style+" style interior design, photorealistic, keep original room layout"
 
 const response = await fetch(
 "https://api.replicate.com/v1/predictions",
 {
 method:"POST",
 headers:{
-Authorization:`Token ${token}`,
+"Authorization":`Token ${token}`,
 "Content-Type":"application/json",
 "Prefer":"wait"
 },
 body:JSON.stringify({
-version:"39ed52f2a78e9346f6c59c8f1a5f3b59e8f8cba3c0a9b2c89c1d0c3bcb7c2c1f",
+version:"15a3689c7b4d3e3f9c5a16e9c5d2c65e6a85ee661eb5d286276f4e5a3815014a",
 input:{
-image:image,
+init_image:image,
 prompt:prompt,
-strength:0.7,
+strength:0.65,
 num_outputs:1
 }
 })
@@ -35,8 +31,10 @@ num_outputs:1
 
 const data = await response.json()
 
-if(data.error){
-return res.status(500).json(data)
+if(!data.output){
+return res.status(500).json({
+error:"AI generation failed"
+})
 }
 
 return res.status(200).json({
