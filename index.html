@@ -70,6 +70,8 @@ accept="image/*"
 capture="environment"
 />
 
+<button onclick="uploadPhoto()">Upload Photo</button>
+
 <p id="status"></p>
 
 <img id="preview">
@@ -142,6 +144,39 @@ reader.readAsDataURL(file)
 
 })
 
+async function uploadPhoto(){
+
+const file = document.getElementById("photoInput").files[0]
+
+if(!file){
+alert("Please choose a photo")
+return
+}
+
+document.getElementById("status").innerText = "Uploading..."
+
+const user = await client.auth.getUser()
+
+const userId = user.data.user.id
+
+const filePath = userId + "/" + Date.now() + ".jpg"
+
+const { error } = await client.storage
+.from("room-images")
+.upload(filePath,file)
+
+if(error){
+
+document.getElementById("status").innerText="Upload failed"
+console.log(error)
+
+}else{
+
+document.getElementById("status").innerText="Upload success"
+
+}
+
+}  
 </script>
 
 </body>
