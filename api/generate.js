@@ -1,12 +1,16 @@
-export default async function handler(req, res) {
+export default async function handler(req,res){
+
+if(req.method !== "POST"){
+return res.status(405).json({error:"Method not allowed"})
+}
 
 try{
 
 const token = process.env.REPLICATE_API_TOKEN
-const { image, style } = req.body
+const {image,style} = req.body
 
 const prompt =
-"beautiful "+style+" style interior design, photorealistic, keep original room layout"
+"beautiful "+style+" style interior design, photorealistic, keep same room layout"
 
 const response = await fetch(
 "https://api.replicate.com/v1/predictions",
@@ -19,13 +23,14 @@ headers:{
 },
 body:JSON.stringify({
 
-version:"db21e45caa7c57c3b5c7c7b69c8b1eab2b2f6c6f1a0d9c9a8b4e6c5d3c8f6f3e",
+version:"d0ee3d708c6e1f1a1c1e099f3996bd6f66a701d2325405cb9184160a9c3a01d9",
 
 input:{
 image:image,
 prompt:prompt,
-prompt_strength:0.8,
-num_outputs:1
+strength:0.65,
+num_outputs:1,
+guidance_scale:7.5
 }
 
 })
@@ -34,8 +39,12 @@ num_outputs:1
 
 const data = await response.json()
 
+console.log("Replicate result:",data)
+
 if(!data.output){
-return res.status(500).json({error:"AI generation failed"})
+return res.status(500).json({
+error:"AI generation failed"
+})
 }
 
 return res.status(200).json({
@@ -43,6 +52,8 @@ output:data.output
 })
 
 }catch(err){
+
+console.error(err)
 
 return res.status(500).json({
 error:err.message
