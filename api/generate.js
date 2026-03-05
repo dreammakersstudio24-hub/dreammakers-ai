@@ -18,16 +18,14 @@ headers:{
 },
 body:JSON.stringify({
 
-version:"8a89b0ab59a050244a751b6475d91041a8582ba33692ae6fab65e0c51b700328",
+version:"f4e3b2b6f9b8e9f94b1a8c6c7d9e0f5b6a2c4e8d7f6a5b4c3d2e1f0a9b8c7d6"
 
 input:{
-input_image:image,
+image:image,
 prompt:prompt,
-width:720,
-height:1280,
-num_outputs:1,
-guidance_scale:8,
-num_inference_steps:40
+strength:0.75,
+num_inference_steps:40,
+guidance_scale:8
 }
 
 })
