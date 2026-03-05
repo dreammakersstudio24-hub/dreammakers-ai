@@ -18,7 +18,7 @@ headers:{
 "Content-Type":"application/json"
 },
 body:JSON.stringify({
-version:"8beff3369e814221c6f6b7f5c9d9c6e1a2a6b5f0d4d0b8f3e1c7a8b0e5d3c2f1"
+version:"ac732df83cea7fff2b5d6b2f1c7f0e52ffb4058a52c57d205c3bd6c0e0c4f52c"
 input:{
 image:image,
 prompt:prompt
