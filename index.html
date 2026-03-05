@@ -256,59 +256,19 @@ style:selectedStyle
 })
 })
 
-const prediction = await response.json()
+const data = await response.json()
 
-console.log("Prediction:",prediction)
+console.log("AI RESULT:",data)
 
-if(!prediction.urls || !prediction.urls.get){
-document.getElementById("aiStatus").innerText =
-"AI start failed"
-console.error(prediction)
-return
-}
-
-const getUrl = prediction.urls.get
-
-let imageUrl = null
-let tries = 0
-
-while(tries < 60){
-
-const poll = await fetch(getUrl)
-
-const pollData = await poll.json()
-
-console.log("Polling:",pollData)
-
-if(pollData.status === "succeeded"){
-
-imageUrl = Array.isArray(pollData.output)
-? pollData.output[0]
-: pollData.output
-
-break
-}
-
-if(pollData.status === "failed"){
+if(!data.output){
 document.getElementById("aiStatus").innerText =
 "AI generation failed"
 return
 }
 
-document.getElementById("aiStatus").innerText =
-"AI is generating... please wait"
-
-await new Promise(r=>setTimeout(r,2000))
-
-tries++
-
-}
-
-if(!imageUrl){
-document.getElementById("aiStatus").innerText =
-"AI timeout. Try again."
-return
-}
+const imageUrl = Array.isArray(data.output)
+? data.output[0]
+: data.output
 
 document.getElementById("aiResult").src = imageUrl
 
@@ -325,7 +285,6 @@ document.getElementById("aiStatus").innerText =
 }
 
 }
-
 
 </script>
 
