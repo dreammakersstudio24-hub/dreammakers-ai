@@ -243,6 +243,8 @@ return
 document.getElementById("aiStatus").innerText =
 "Generating AI design..."
 
+try{
+
 const response = await fetch("/api/generate",{
 method:"POST",
 headers:{
@@ -258,17 +260,21 @@ const prediction = await response.json()
 
 console.log("Prediction:",prediction)
 
+if(!prediction.urls || !prediction.urls.get){
+document.getElementById("aiStatus").innerText =
+"AI start failed"
+console.error(prediction)
+return
+}
+
 const getUrl = prediction.urls.get
 
 let imageUrl = null
+let tries = 0
 
-while(true){
+while(tries < 60){
 
-const poll = await fetch(getUrl,{
-headers:{
-"Content-Type":"application/json"
-}
-})
+const poll = await fetch(getUrl)
 
 const pollData = await poll.json()
 
@@ -281,7 +287,6 @@ imageUrl = Array.isArray(pollData.output)
 : pollData.output
 
 break
-
 }
 
 if(pollData.status === "failed"){
@@ -290,8 +295,19 @@ document.getElementById("aiStatus").innerText =
 return
 }
 
+document.getElementById("aiStatus").innerText =
+"AI is generating... please wait"
+
 await new Promise(r=>setTimeout(r,2000))
 
+tries++
+
+}
+
+if(!imageUrl){
+document.getElementById("aiStatus").innerText =
+"AI timeout. Try again."
+return
 }
 
 document.getElementById("aiResult").src = imageUrl
@@ -299,7 +315,17 @@ document.getElementById("aiResult").src = imageUrl
 document.getElementById("aiStatus").innerText =
 "AI design generated!"
 
+}catch(err){
+
+console.error(err)
+
+document.getElementById("aiStatus").innerText =
+"System error"
+
 }
+
+}
+
 
 </script>
 
