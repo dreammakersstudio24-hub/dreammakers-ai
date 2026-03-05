@@ -242,10 +242,18 @@ alert("Please select a style first")
 return
 }
 
-document.getElementById("aiStatus").innerText =
-"AI generation coming in next step..."
+if(!window.uploadedImageUrl){
+alert("Please upload a photo first")
+return
+}
 
-}  
+document.getElementById("aiStatus").innerText =
+"Preparing AI generation..."
+
+console.log("IMAGE:", window.uploadedImageUrl)
+console.log("STYLE:", selectedStyle)
+
+}
 </script>
 
 </body>
