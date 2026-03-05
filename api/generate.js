@@ -11,7 +11,7 @@ headers: {
 "Content-Type": "application/json"
 },
 body: JSON.stringify({
-version: "db21e45d3f95c1d7f6e1c30e5a52f2e4e8c5e9e7f1b1b9f6f6e3f2f8d2e3c1f2",
+version: "ac732df83cea7fff8e4a3ff6e4fbe0c9d0c6b6d70f6a1e7b2e6f9c6e5c1f2b34",
 input: {
 image: image,
 prompt: `${style} interior design`
