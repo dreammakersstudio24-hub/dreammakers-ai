@@ -218,6 +218,8 @@ const { data } = client
 .from("room-images")
 .getPublicUrl(filePath)
 
+window.uploadedImageUrl = data.publicUrl
+  
 preview.src = data.publicUrl
 
 }
