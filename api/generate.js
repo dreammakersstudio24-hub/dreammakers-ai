@@ -29,6 +29,19 @@ prompt:prompt
 
 const prediction = await start.json()
 
+console.log("Prediction start:",prediction)
+
+if(prediction.error){
+return res.status(500).json(prediction)
+}
+
+if(!prediction.urls){
+return res.status(500).json({
+error:"Prediction URL missing",
+data:prediction
+})
+}
+
 let status = prediction.status
 let getUrl = prediction.urls.get
 let output = null
@@ -43,15 +56,19 @@ headers:{
 }
 })
 
-const data = await poll.json()
+const pollData = await poll.json()
 
-status = data.status
-output = data.output
+console.log("Polling:",pollData)
+
+status = pollData.status
+output = pollData.output
 
 }
 
 if(status === "failed"){
-return res.status(500).json({error:"AI failed"})
+return res.status(500).json({
+error:"AI generation failed"
+})
 }
 
 return res.status(200).json({
@@ -60,7 +77,7 @@ output:output
 
 }catch(err){
 
-console.log(err)
+console.log("SERVER ERROR:",err)
 
 return res.status(500).json({
 error:err.message
