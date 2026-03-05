@@ -264,7 +264,7 @@ style:selectedStyle
 const data = await response.json()
 console.log(data)
 
-const imageUrl = data.output[0]
+const imageUrl = Array.isArray(data.output) ? data.output[0] : data.output
 
 const img = document.createElement("img")
 img.src = imageUrl
