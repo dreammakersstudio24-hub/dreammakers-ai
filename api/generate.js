@@ -1,5 +1,7 @@
 export default async function handler(req,res){
 
+try{
+
 const replicateToken = process.env.REPLICATE_API_TOKEN
 
 const { image, style } = req.body
@@ -25,7 +27,11 @@ prompt:prompt
 }
 )
 
-let data = await prediction.json()
+const data = await prediction.json()
+
+if(!data.urls || !data.urls.get){
+return res.status(500).json({error:"Replicate response invalid"})
+}
 
 let getUrl = data.urls.get
 
@@ -56,6 +62,16 @@ error:"AI generation failed"
 })
 
 }
+
+}
+
+}catch(err){
+
+console.log(err)
+
+return res.status(500).json({
+error:err.message
+})
 
 }
 
