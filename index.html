@@ -174,6 +174,13 @@ console.log(error)
 
 document.getElementById("status").innerText="Upload success"
 
+const { data } = client
+.storage
+.from("room-images")
+.getPublicUrl(filePath)
+
+preview.src = data.publicUrl
+
 }
 
 }  
