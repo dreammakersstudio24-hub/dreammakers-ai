@@ -262,8 +262,16 @@ style:selectedStyle
 })
 
 const data = await response.json()
-
 console.log(data)
+
+const imageUrl = data.output[0]
+
+const img = document.createElement("img")
+img.src = imageUrl
+img.style.width = "300px"
+img.style.marginTop = "20px"
+
+document.body.appendChild(img)
 
 document.getElementById("aiStatus").innerText =
 "AI request sent. Rendering may take ~20 seconds."
