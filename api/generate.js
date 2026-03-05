@@ -6,7 +6,7 @@ const replicateToken = process.env.REPLICATE_API_TOKEN
 const { image, style } = req.body
 
 const prompt =
-"beautiful "+style+" style interior design, modern furniture, photorealistic, keep original room layout"
+"beautiful "+style+" style interior redesign, same room layout, professional interior design, photorealistic"
 
 const start = await fetch(
 "https://api.replicate.com/v1/predictions",
@@ -26,8 +26,8 @@ prompt:prompt,
 width:720,
 height:1280,
 num_outputs:1,
-guidance_scale:7,
-num_inference_steps:30
+guidance_scale:8,
+num_inference_steps:40
 }
 
 })
@@ -46,8 +46,9 @@ const getUrl =
 `https://api.replicate.com/v1/predictions/${prediction.id}`
 
 let output = null
+let tries = 0
 
-while(status !== "succeeded" && status !== "failed"){
+while(status !== "succeeded" && status !== "failed" && tries < 60){
 
 await new Promise(r=>setTimeout(r,2000))
 
@@ -62,10 +63,12 @@ const pollData = await poll.json()
 status = pollData.status
 output = pollData.output
 
+tries++
+
 }
 
-if(status === "failed"){
-return res.status(500).json({error:"AI generation failed"})
+if(status !== "succeeded"){
+return res.status(500).json({error:"AI generation timeout"})
 }
 
 return res.status(200).json({
