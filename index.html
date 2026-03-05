@@ -75,7 +75,33 @@ capture="environment"
 <p id="status"></p>
 
 <img id="preview">
+<h3>Choose Style</h3>
 
+<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:500px;margin:auto">
+
+<div onclick="selectStyle('minimal')" style="background:#1e293b;padding:15px;border-radius:8px;width:120px;cursor:pointer">
+Minimal
+</div>
+
+<div onclick="selectStyle('scandinavian')" style="background:#1e293b;padding:15px;border-radius:8px;width:120px;cursor:pointer">
+Scandinavian
+</div>
+
+<div onclick="selectStyle('luxury')" style="background:#1e293b;padding:15px;border-radius:8px;width:120px;cursor:pointer">
+Luxury
+</div>
+
+<div onclick="selectStyle('modern')" style="background:#1e293b;padding:15px;border-radius:8px;width:120px;cursor:pointer">
+Modern
+</div>
+
+<div onclick="selectStyle('japandi')" style="background:#1e293b;padding:15px;border-radius:8px;width:120px;cursor:pointer">
+Japandi
+</div>
+
+</div>
+
+<p id="styleStatus"></p>
 
 <script>
 
@@ -184,6 +210,17 @@ preview.src = data.publicUrl
 }
 
 }  
+let selectedStyle = ""
+
+function selectStyle(style){
+
+selectedStyle = style
+
+document.getElementById("styleStatus").innerText =
+"Selected style: " + style
+
+}
+  
 </script>
 
 </body>
