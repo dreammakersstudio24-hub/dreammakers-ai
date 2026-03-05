@@ -41,7 +41,10 @@ return res.status(500).json(prediction)
 }
 
 let status = prediction.status
-let getUrl = prediction.urls.get
+
+const getUrl =
+`https://api.replicate.com/v1/predictions/${prediction.id}`
+
 let output = null
 
 while(status !== "succeeded" && status !== "failed"){
