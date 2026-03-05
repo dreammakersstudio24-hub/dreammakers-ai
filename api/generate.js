@@ -18,7 +18,7 @@ headers:{
 "Content-Type":"application/json"
 },
 body:JSON.stringify({
-version:"stability-ai/sdxl",
+version:"8beff3369e814221c6f6b7f5c9d9c6e1a2a6b5f0d4d0b8f3e1c7a8b0e5d3c2f1"
 input:{
 image:image,
 prompt:prompt
