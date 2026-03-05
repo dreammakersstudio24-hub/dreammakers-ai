@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <html>
+
 <head>
 <meta charset="UTF-8">
 <title>Dream Makers Studio AI</title>
@@ -40,6 +41,14 @@ max-width:300px;
 border-radius:10px;
 }
 
+.styleBox{
+background:#1e293b;
+padding:15px;
+border-radius:8px;
+width:120px;
+cursor:pointer;
+}
+
 </style>
 
 </head>
@@ -52,14 +61,11 @@ border-radius:10px;
 <input id="email" placeholder="Email">
 <input id="password" type="password" placeholder="Password">
 
-<button onclick="signup()">Sign Up</button>
-<button onclick="login()">Login</button>
+<button onclick="signup()">Sign Up</button> <button onclick="login()">Login</button>
 
 <p id="msg"></p>
 
-
 <hr style="margin:40px;">
-
 
 <h2>Upload Room Photo</h2>
 
@@ -75,29 +81,16 @@ capture="environment"
 <p id="status"></p>
 
 <img id="preview">
+
 <h3>Choose Style</h3>
 
 <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:500px;margin:auto">
 
-<div onclick="selectStyle('minimal')" style="background:#1e293b;padding:15px;border-radius:8px;width:120px;cursor:pointer">
-Minimal
-</div>
-
-<div onclick="selectStyle('scandinavian')" style="background:#1e293b;padding:15px;border-radius:8px;width:120px;cursor:pointer">
-Scandinavian
-</div>
-
-<div onclick="selectStyle('luxury')" style="background:#1e293b;padding:15px;border-radius:8px;width:120px;cursor:pointer">
-Luxury
-</div>
-
-<div onclick="selectStyle('modern')" style="background:#1e293b;padding:15px;border-radius:8px;width:120px;cursor:pointer">
-Modern
-</div>
-
-<div onclick="selectStyle('japandi')" style="background:#1e293b;padding:15px;border-radius:8px;width:120px;cursor:pointer">
-Japandi
-</div>
+<div class="styleBox" onclick="selectStyle('minimal')">Minimal</div>
+<div class="styleBox" onclick="selectStyle('scandinavian')">Scandinavian</div>
+<div class="styleBox" onclick="selectStyle('luxury')">Luxury</div>
+<div class="styleBox" onclick="selectStyle('modern')">Modern</div>
+<div class="styleBox" onclick="selectStyle('japandi')">Japandi</div>
 
 </div>
 
@@ -109,7 +102,7 @@ Generate AI Design
 
 <p id="aiStatus"></p>
 
-<img id="aiResult" style="max-width:300px;margin-top:20px;border-radius:10px">  
+<img id="aiResult">
 
 <script>
 
@@ -118,6 +111,7 @@ const key = "sb_publishable_b_WO8d4duWJ7tATcBIceRg_TbzF-2-N"
 
 const client = supabase.createClient(url,key)
 
+let selectedStyle = ""
 
 async function signup(){
 
@@ -137,7 +131,6 @@ msg.innerText = "Signup success"
 
 }
 
-
 async function login(){
 
 const email = document.getElementById("email").value
@@ -156,7 +149,6 @@ msg.innerText = "Login success"
 
 }
 
-
 // preview image
 
 const input = document.getElementById("photoInput")
@@ -165,7 +157,6 @@ const preview = document.getElementById("preview")
 input.addEventListener("change", () => {
 
 const file = input.files[0]
-
 if(!file) return
 
 const reader = new FileReader()
@@ -178,14 +169,11 @@ reader.readAsDataURL(file)
 
 })
 
+// upload image
+
 async function uploadPhoto(){
 
 const file = document.getElementById("photoInput").files[0]
-
-if(selectedStyle === ""){
-alert("Please select a style first")
-return
-}  
 
 if(!file){
 alert("Please choose a photo")
@@ -195,6 +183,11 @@ return
 document.getElementById("status").innerText = "Uploading..."
 
 const user = await client.auth.getUser()
+
+if(!user.data.user){
+alert("Please login first")
+return
+}
 
 const userId = user.data.user.id
 
@@ -219,13 +212,12 @@ const { data } = client
 .getPublicUrl(filePath)
 
 window.uploadedImageUrl = data.publicUrl
-  
+
 preview.src = data.publicUrl
 
 }
 
-}  
-let selectedStyle = ""
+}
 
 function selectStyle(style){
 
@@ -235,6 +227,7 @@ document.getElementById("styleStatus").innerText =
 "Selected style: " + style
 
 }
+
 async function generateAI(){
 
 if(selectedStyle === ""){
@@ -264,19 +257,16 @@ style:selectedStyle
 const data = await response.json()
 console.log(data)
 
-const imageUrl = Array.isArray(data.output) ? data.output[0] : data.output
+const imageUrl =
+Array.isArray(data.output) ? data.output[0] : data.output
 
-const img = document.createElement("img")
-img.src = imageUrl
-img.style.width = "300px"
-img.style.marginTop = "20px"
-
-document.getElementById("result").appendChild(img)
+document.getElementById("aiResult").src = imageUrl
 
 document.getElementById("aiStatus").innerText =
-"AI request sent. Rendering may take ~20 seconds."
+"AI design generated!"
 
 }
+
 </script>
 
 </body>
