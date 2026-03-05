@@ -254,29 +254,44 @@ style:selectedStyle
 })
 })
 
-const data = await response.json()
-console.log("AI RESPONSE:",data)
+const prediction = await response.json()
+
+console.log("Prediction:",prediction)
+
+const getUrl = prediction.urls.get
 
 let imageUrl = null
 
-if(data.output){
+while(true){
 
-if(Array.isArray(data.output)){
-imageUrl = data.output[0]
-}else{
-imageUrl = data.output
+const poll = await fetch(getUrl,{
+headers:{
+"Content-Type":"application/json"
+}
+})
+
+const pollData = await poll.json()
+
+console.log("Polling:",pollData)
+
+if(pollData.status === "succeeded"){
+
+imageUrl = Array.isArray(pollData.output)
+? pollData.output[0]
+: pollData.output
+
+break
+
 }
 
-}
-
-if(!imageUrl && data.urls && data.urls.get){
-imageUrl = data.urls.get
-}
-
-if(!imageUrl){
+if(pollData.status === "failed"){
 document.getElementById("aiStatus").innerText =
-"AI finished but no image URL returned"
+"AI generation failed"
 return
+}
+
+await new Promise(r=>setTimeout(r,2000))
+
 }
 
 document.getElementById("aiResult").src = imageUrl
@@ -285,7 +300,6 @@ document.getElementById("aiStatus").innerText =
 "AI design generated!"
 
 }
-
 
 </script>
 
