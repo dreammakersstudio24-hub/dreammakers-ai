@@ -10,61 +10,35 @@ const token = process.env.REPLICATE_API_TOKEN
 const {image,style} = req.body
 
 const prompt =
-"A beautiful "+style+" style interior design, keep same room layout, same window position, photorealistic, professional architecture photo"
+"beautiful "+style+" style interior design, keep same room layout, photorealistic"
 
-const start = await fetch(
+const response = await fetch(
 "https://api.replicate.com/v1/predictions",
 {
 method:"POST",
 headers:{
-"Authorization":`Token ${token}`,
+Authorization:`Token ${token}`,
 "Content-Type":"application/json"
 },
 body:JSON.stringify({
-
-version:"flux-kontext-pro",
-
+version:"7762fd07cf82c948538e41f63f77d685e02b063e37e496e96eefd46c929f9bdc",
 input:{
 image:image,
-prompt:prompt,
-aspect_ratio:"9:16",
-output_format:"png"
+prompt:prompt
 }
-
 })
 }
 )
 
-const prediction = await start.json()
+const data = await response.json()
 
-const getUrl =
-`https://api.replicate.com/v1/predictions/${prediction.id}`
-
-let status = prediction.status
-let output = null
-
-while(status !== "succeeded" && status !== "failed"){
-
-await new Promise(r=>setTimeout(r,1500))
-
-const poll = await fetch(getUrl,{
-headers:{
-Authorization:`Token ${token}`
+if(data.error){
+return res.status(500).json(data)
 }
+
+return res.status(200).json({
+output:data.output
 })
-
-const data = await poll.json()
-
-status = data.status
-output = data.output
-
-}
-
-if(status === "failed"){
-return res.status(500).json({error:"AI failed"})
-}
-
-return res.status(200).json({output})
 
 }catch(err){
 
