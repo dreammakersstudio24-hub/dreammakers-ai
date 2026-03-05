@@ -240,8 +240,7 @@ alert("Please upload a photo first")
 return
 }
 
-document.getElementById("aiStatus").innerText =
-"Generating AI design..."
+aiStatus.innerText="Generating AI design..."
 
 try{
 
@@ -258,11 +257,10 @@ style:selectedStyle
 
 const data = await response.json()
 
-console.log("AI RESULT:",data)
+console.log(data)
 
 if(!data.output){
-document.getElementById("aiStatus").innerText =
-"AI generation failed"
+aiStatus.innerText="AI generation failed"
 return
 }
 
@@ -270,17 +268,14 @@ const imageUrl = Array.isArray(data.output)
 ? data.output[0]
 : data.output
 
-document.getElementById("aiResult").src = imageUrl
+aiResult.src = imageUrl
 
-document.getElementById("aiStatus").innerText =
-"AI design generated!"
+aiStatus.innerText="AI design generated!"
 
 }catch(err){
 
 console.error(err)
-
-document.getElementById("aiStatus").innerText =
-"System error"
+aiStatus.innerText="System error"
 
 }
 
