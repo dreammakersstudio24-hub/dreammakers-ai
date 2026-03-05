@@ -230,30 +230,62 @@ document.getElementById("styleStatus").innerText =
 
 async function generateAI(){
 
-const res = await fetch("/api/generate",{
+if(selectedStyle === ""){
+alert("Please select a style first")
+return
+}
+
+if(!window.uploadedImageUrl){
+alert("Please upload a photo first")
+return
+}
+
+document.getElementById("aiStatus").innerText =
+"Generating AI design..."
+
+try{
+
+const response = await fetch("/api/generate",{
 method:"POST",
 headers:{
 "Content-Type":"application/json"
 },
 body:JSON.stringify({
-image:uploadedImageUrl,
+image:window.uploadedImageUrl,
 style:selectedStyle
 })
 })
 
-const data = await res.json()
+const data = await response.json()
 
-if(data.output){
+console.log("AI RESULT:",data)
 
-aiResult.src = data.output[0]
+if(!data.output){
+document.getElementById("aiStatus").innerText =
+"AI generation failed"
+return
+}
 
-}else{
+const imageUrl = Array.isArray(data.output)
+? data.output[0]
+: data.output
 
-alert("AI generation failed")
+document.getElementById("aiResult").src = imageUrl
+
+document.getElementById("aiStatus").innerText =
+"AI design generated!"
+
+}catch(err){
+
+console.error(err)
+
+document.getElementById("aiStatus").innerText =
+"System error"
 
 }
 
 }
+
 
 </script>
 
