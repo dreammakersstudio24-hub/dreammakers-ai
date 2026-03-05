@@ -103,6 +103,14 @@ Japandi
 
 <p id="styleStatus"></p>
 
+<button onclick="generateAI()" style="margin-top:20px">
+Generate AI Design
+</button>
+
+<p id="aiStatus"></p>
+
+<img id="aiResult" style="max-width:300px;margin-top:20px;border-radius:10px">  
+
 <script>
 
 const url = "https://etccavrpchbtcpeegtbu.supabase.co"
@@ -225,7 +233,17 @@ document.getElementById("styleStatus").innerText =
 "Selected style: " + style
 
 }
-  
+async function generateAI(){
+
+if(selectedStyle === ""){
+alert("Please select a style first")
+return
+}
+
+document.getElementById("aiStatus").innerText =
+"AI generation coming in next step..."
+
+}  
 </script>
 
 </body>
