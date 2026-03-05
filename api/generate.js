@@ -28,7 +28,7 @@ Prefer:"wait"
 },
 body:JSON.stringify({
 
-version:"d0ee3d708c6e1f1a1c1e099f3996bd6f66a701d2325405cb9184160a9c3a01d9",
+version:"ac732df83cea7fff1cf3f0e3c5a6d2a45c7c1d24b3a91a6b1e0c9c45f1ab3c5e",
 
 input:{
 image:"data:image/png;base64,"+base64,
