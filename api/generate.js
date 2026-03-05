@@ -9,7 +9,7 @@ const { image, style } = req.body
 const prompt =
 "Interior redesign of this room in "+style+" style, ultra realistic interior design, photorealistic"
 
-const response = await fetch(
+const start = await fetch(
 "https://api.replicate.com/v1/predictions",
 {
 method:"POST",
@@ -27,11 +27,36 @@ prompt:prompt
 }
 )
 
-const data = await response.json()
+const prediction = await start.json()
 
-console.log("REPLICATE:",data)
+let status = prediction.status
+let getUrl = prediction.urls.get
+let output = null
 
-return res.status(200).json(data)
+while(status !== "succeeded" && status !== "failed"){
+
+await new Promise(r=>setTimeout(r,2000))
+
+const poll = await fetch(getUrl,{
+headers:{
+"Authorization":`Token ${replicateToken}`
+}
+})
+
+const data = await poll.json()
+
+status = data.status
+output = data.output
+
+}
+
+if(status === "failed"){
+return res.status(500).json({error:"AI failed"})
+}
+
+return res.status(200).json({
+output:output
+})
 
 }catch(err){
 
