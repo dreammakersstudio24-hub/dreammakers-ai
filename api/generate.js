@@ -21,10 +21,12 @@ Authorization:`Token ${token}`,
 "Content-Type":"application/json"
 },
 body:JSON.stringify({
-version:"7762fd07cf82c948538e41f63f77d685e02b063e37e496e96eefd46c929f9bdc",
+version:"39ed52f2a78e9346f6c59c8f1a5f3b59e8f8cba3c0a9b2c89c1d0c3bcb7c2c1f",
 input:{
 image:image,
-prompt:prompt
+prompt:prompt,
+strength:0.7,
+num_outputs:1
 }
 })
 }
