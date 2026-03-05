@@ -9,7 +9,7 @@ const { image, style } = req.body
 const prompt =
 "Interior redesign of this room in "+style+" style, ultra realistic interior design, photorealistic"
 
-const prediction = await fetch(
+const response = await fetch(
 "https://api.replicate.com/v1/predictions",
 {
 method:"POST",
@@ -18,7 +18,7 @@ headers:{
 "Content-Type":"application/json"
 },
 body:JSON.stringify({
-version:"ac732df83cea7fff2b5d6b2f1c7f0e52ffb4058a52c57d205c3bd6c0e0c4f52c"
+version:"ac732df83cea7fff2b5d6b2f1c7f0e52ffb4058a52c57d205c3bd6c0e0c4f52c",
 input:{
 image:image,
 prompt:prompt
@@ -27,57 +27,15 @@ prompt:prompt
 }
 )
 
-const data = await prediction.json()
+const data = await response.json()
 
-console.log("REPLICATE RESPONSE:",data)
+console.log("REPLICATE:",data)
 
-if(!data.urls){
-
-return res.status(500).json({
-error:"Replicate did not return urls",
-replicate:data
-})
-
-}
-
-let getUrl = data.urls.get
-
-while(true){
-
-await new Promise(r=>setTimeout(r,2000))
-
-const poll = await fetch(getUrl,{
-headers:{
-"Authorization":`Token ${replicateToken}`
-}
-})
-
-const pollData = await poll.json()
-
-console.log("POLL:",pollData.status)
-
-if(pollData.status === "succeeded"){
-
-return res.status(200).json({
-output: pollData.output
-})
-
-}
-
-if(pollData.status === "failed"){
-
-return res.status(500).json({
-error:"AI generation failed",
-details:pollData
-})
-
-}
-
-}
+return res.status(200).json(data)
 
 }catch(err){
 
-console.log("SERVER ERROR:",err)
+console.log(err)
 
 return res.status(500).json({
 error:err.message
