@@ -24,11 +24,12 @@ Prefer: "wait"
 body: JSON.stringify({
 
 version:
-"db21e45c8e0a8e9b1fbe8c0d5857a1f5aaecf66da68c249c090e28ca06e4756a",
+"ac732df83cea7fff1cf3f0e3c5a6d2a45c7c1d24b3a91a6b1e0c9c45f1ab3c5e",
 
 input: {
 image: image,
-prompt: prompt
+prompt: prompt,
+strength: 0.65
 }
 
 })
@@ -40,7 +41,12 @@ const data = await response.json()
 console.log("Replicate:", data)
 
 if (!data.output) {
-return res.status(500).json({ error: "AI generation failed" })
+
+return res.status(500).json({
+error: "AI generation failed",
+details: data
+})
+
 }
 
 return res.status(200).json({
