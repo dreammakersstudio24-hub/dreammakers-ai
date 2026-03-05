@@ -1,26 +1,62 @@
-export default async function handler(req, res) {
+export default async function handler(req,res){
 
-  const token = process.env.REPLICATE_API_TOKEN
+const replicateToken = process.env.REPLICATE_API_TOKEN
 
-  const { image, style } = req.body
+const { image, style } = req.body
 
-  const response = await fetch("https://api.replicate.com/v1/predictions", {
-    method: "POST",
-    headers: {
-      "Authorization": `Token ${token}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      version: "da77bc59ee60423279fd632efb4795ab731d9e3ca9705ef3341091fb989b7eaf",
-      input: {
-        image: image,
-        prompt: `${style} interior design, beautiful living room, photorealistic`
-      }
-    })
-  })
+const prompt =
+"Interior redesign of this room in "+style+" style, ultra realistic, interior design photography"
 
-  const data = await response.json()
+const prediction = await fetch(
+"https://api.replicate.com/v1/predictions",
+{
+method:"POST",
+headers:{
+"Authorization":`Token ${replicateToken}`,
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+version:"7762fd07cf82c5a453c33dfd59f7f8c3cecb84ccf0c5d7f82e3d7b66c9b1a87a",
+input:{
+image:image,
+prompt:prompt
+}
+})
+}
+)
 
-  res.status(200).json(data)
+let data = await prediction.json()
+
+let getUrl = data.urls.get
+
+while(true){
+
+await new Promise(r=>setTimeout(r,2000))
+
+const poll = await fetch(getUrl,{
+headers:{
+"Authorization":`Token ${replicateToken}`
+}
+})
+
+const pollData = await poll.json()
+
+if(pollData.status === "succeeded"){
+
+return res.status(200).json({
+output: pollData.output
+})
+
+}
+
+if(pollData.status === "failed"){
+
+return res.status(500).json({
+error:"AI generation failed"
+})
+
+}
+
+}
 
 }
